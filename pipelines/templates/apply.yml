@@ -1,0 +1,22 @@
+jobs:
+# defines jobs for Terraform apply
+- job: Apply
+  # name of the job
+  pool:
+    vmImage: 'ubuntu-latest'
+    # runs on latest Ubuntu image
+  steps:
+  - task: AzureCLI@2
+    # Azure CLI task to run Terraform apply
+    inputs:
+      azureSubscription: $(AZURE_SUBSCRIPTION)
+      # CHANGE: must match your DevOps service connection name
+      scriptType: bash
+      # run bash script
+      scriptLocation: inlineScript
+      # script is inline
+      inlineScript: |
+        terraform init
+        # initializes Terraform
+        terraform apply -auto-approve tfplan
+        # applies the saved plan automatically
