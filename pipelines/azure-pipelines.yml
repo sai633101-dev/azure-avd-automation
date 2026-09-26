@@ -1,0 +1,24 @@
+trigger:
+- main   # change if your default branch is different (e.g., master)
+
+variables:
+  TF_VERSION: '1.5.0'   # change if you want a newer Terraform version
+  AZURE_SUBSCRIPTION: 'Service-Connection-Name'  # replace with your Azure DevOps service connection name
+
+stages:
+- stage: Build
+  jobs:
+  - template: templates/build.yml
+
+- stage: CodeScan
+  jobs:
+  - template: templates/sonar.yml
+
+- stage: Plan
+  jobs:
+  - template: templates/plan.yml
+
+- stage: Apply
+  dependsOn: Plan
+  jobs:
+  - template: templates/apply.yml
