@@ -1,13 +1,23 @@
-jobs:                           # defines jobs that run in this stage
-- job: Build                    # name of the job
-  pool:                         # specifies the agent pool
-    vmImage: 'ubuntu-latest'    # runs on latest Ubuntu image
-  steps:                        # list of steps to execute
-  - task: UseTerraform@0        # installs Terraform on the agent
+jobs:
+# defines jobs that run in this stage
+- job: Build
+  # name of the job
+  pool:
+    vmImage: 'ubuntu-latest'
+    # runs on latest Ubuntu image
+  steps:
+    # list of steps to execute
+  - task: UseTerraform@0
+    # installs Terraform on the agent
     inputs:
-      terraformVersion: $(TF_VERSION)   # uses pipeline variable for Terraform version
-  - script: |                   # run inline shell script
-      terraform init            # initializes Terraform working directory
-      terraform fmt -check      # checks formatting of Terraform files
-      terraform validate        # validates Terraform configuration
-    displayName: 'Terraform Init + Validate'   # label shown in pipeline logs
+      terraformVersion: $(TF_VERSION)
+      # uses pipeline variable for Terraform version
+  - script: |
+      terraform init
+      #initializes Terraform working directory
+      terraform fmt -check
+      #checks formatting of Terraform files
+      terraform validate
+      #validates Terraform configuration
+    displayName: 'Terraform Init + Validate'
+    #label shown in pipeline logs
