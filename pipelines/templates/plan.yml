@@ -1,0 +1,29 @@
+jobs:
+# defines jobs for Terraform plan
+- job: Plan
+  # name of the job
+  pool:
+    vmImage: 'ubuntu-latest'
+    # runs on latest Ubuntu image
+  steps:
+  - task: AzureCLI@2
+    # Azure CLI task to run Terraform commands
+    inputs:
+      azureSubscription: $(AZURE_SUBSCRIPTION)
+      # CHANGE: must match your DevOps service connection name
+      scriptType: bash
+      # run bash script
+      scriptLocation: inlineScript
+      # script is inline
+      inlineScript: |
+        terraform init
+        # initializes Terraform
+        terraform plan -out=tfplan
+        # generates plan and saves to file
+  - task: PublishBuildArtifacts@1
+    # publishes artifacts
+    inputs:
+      PathtoPublish: 'tfplan'
+      # path to plan file
+      ArtifactName: 'terraform-plan'
+      # artifact name in DevOps
