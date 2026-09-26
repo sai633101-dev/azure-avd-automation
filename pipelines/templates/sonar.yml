@@ -1,0 +1,28 @@
+jobs:
+# defines jobs for SonarQube scan
+- job: SonarQube
+  # name of the job
+  pool:
+    vmImage: 'ubuntu-latest'
+    # runs on latest Ubuntu image
+  steps:
+  - task: SonarQubePrepare@5
+    # prepares SonarQube analysis
+    inputs:
+      SonarQube: 'SonarQube-Service-Connection'
+      # CHANGE: replace with your SonarQube service connection name
+      scannerMode: 'CLI'
+      # use CLI scanner mode
+      configMode: 'manual'
+      # manual configuration
+      cliProjectKey: 'azure-avd-automation'
+      # CHANGE: unique project key in SonarQube
+      cliProjectName: 'Azure AVD Automation'
+      # CHANGE: friendly project name in SonarQube
+  - task: SonarQubeAnalyze@5
+    # runs the actual analysis
+  - task: SonarQubePublish@5
+    # publishes results back to DevOps
+    inputs:
+      pollingTimeoutSec: '300'
+      # waits up to 5 minutes for results
